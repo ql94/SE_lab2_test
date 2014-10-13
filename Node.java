@@ -9,5 +9,9 @@ class Node {
 		price = 0;
 		qos = 0;
 	}
+	public Node(double x) {price = x;
+		reliability = 0;
+		qos = 0;
+	}
 }
 

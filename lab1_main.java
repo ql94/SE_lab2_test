@@ -1,9 +1,10 @@
 package exp2;
-
 import java.io.*;
 import java.util.*;
 
+
 //main process
+//Ö÷º¯Êý
 
 public class exp {
 	public static void main(String[] args) throws Exception {
