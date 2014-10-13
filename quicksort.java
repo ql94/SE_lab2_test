@@ -1,6 +1,6 @@
 class QuickSort {
 	public Node data[];
-
+//quicksort
 	private int partition(Node sortArray[], int low, int hight) {
 		Node key = new Node();
 		key.name = sortArray[low].name;

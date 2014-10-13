@@ -1,10 +1,9 @@
 package exp2;
-
 import java.io.*;
 import java.util.*;
 
 
-
+//Ö÷º¯Êý
 public class exp {
 	public static void main(String[] args) throws Exception {
 		File file1 = new File("C://PROCESS.txt");
