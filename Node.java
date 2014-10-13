@@ -3,7 +3,7 @@ class Node {
 	public double qos;
 	public double reliability;
 	public double price;
-
+	public double n;
 	public Node() {
 		reliability = 0;
 		price = 0;
