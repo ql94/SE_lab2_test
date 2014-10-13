@@ -1,0 +1,169 @@
+
+
+
+
+
+
+
+
+
+
+
+目  录
+
+1	实验要求	1
+2	待求解问题描述与数学模型	1
+3	算法设计思路	1
+3.1	设计思路	1
+3.2	算法流程图	1
+3.3	核心数据结构	1
+4	实验结果	1
+4.1	流程1	2
+4.2	流程2	2
+4.3	流程3	2
+4.4	流程4	2
+5	编程语言与环境	2
+6	结对编程	2
+6.1	角色切换与任务分工	2
+6.2	工作照片	2
+6.3	工作日志	2
+6.4	对结对编程的体会	2
+7	计划与实际进度	3
+8	小结	3
+
+[文档全部完成之后，请更新上述区域]
+
+ 
+1	实验要求
+服务组合问题，在特定数据集上设计算法，给出实验结果。
+2	待求解问题描述与数学模型
+输入1：一个服务流程，由一组活动及其之间的关系构成，使用DAG
+描述；
+输入2：针对每个服务活动的候选服务集，各服务有功能和QoS信息；
+输入3：客户针对服务流程的QoS需求；
+输出：满足QoS需求的服务选择方案(使用DAG表示) ；
+最优性的评判标准：综合质量最高。计算方式：Q = TR – TP/100，其
+中TR为最终方案的总体可靠性，TP为最终方案的总价格，Q值越大越
+好。
+数据集：
+–1个候选服务集，包含了14个不同的服务活动，各有500个候选服务；
+–4个服务流程，活动节点数目逐渐增加、流程结构的复杂度逐渐增大(包含串
+行和并行两种结构)；
+–4个客户需求，QoS期望不同，分别对应于上述各服务流程；
+在候选服务集上，分别针对4个需求和4个流程进行算法实验，给出实
+验结果。
+约束条件：客户需求（TR，TP），Qos
+3	算法与数据结构设计
+3.1	设计思路
+先利用快排将14组数据按节点qos最大排序，由于最后结果要求qos最优，若单节点qos最优，则单节点reliability趋近于1,price趋近于0，则最优解组合应在排序后数组前面的元素中得到，故只取数组前5位元素进行迭代，通过筛选组合，得到最终结果。
+3.2	算法流程
+Get   Service[14][500];
+Sort(Service[14][500]);
+Getresult（string process, Node[][]service, int x）//x=process个数，及迭代层数
+For(i from 0 to 4)
+{	
+Renew pricetemp，reliabilitytemp，qostemp
+	Record and renew Nodename
+	If(x!=1 && pricetemp，reliabilitytemp，qostemp match client requirments )
+		Getresult(process,service,x-1)
+	If(x!=1 && pricetemp，reliabilitytemp，qostemp don’t match client requirments )
+		Place old value to pricetemp，reliabilitytemp，qostemp;
+	If(flag ==1)
+		Place old value to pricetemp，reliabilitytemp，qostemp;
+	If(x==1)
+		If(pricetemp，reliabilitytemp，qostemp match client requirments)
+			Renew qos,pricefinal,reliabilityfinal;
+			Set Nodename;
+		Place old value to pricetemp，reliabilitytemp，qostemp;
+	If(i==4)
+		Flag=1;
+}
+算法描述：	将service数组按qos排序
+选取每个服务排序后的前五个候选服务进行迭代循环
+若选择某个候选服务不满足用户条件或不优于之前的选择时，停止此次迭代，选择该服务的下一个候选服务，直到循环终止。
+3.3	核心数据结构
+class Node {
+	public double qos, qost;
+	public double price, pricet, price1;
+public double reliability, reliabilityt, reliability1;
+public String name;//节点名称
+	public Node() //构造函数
+}
+class Req {//用户需求
+	public Node[] reqArray = new Node[4];//四组用户需求
+	public void reqGet(File file) throws Exception //从文件中读取需求
+}
+class Process {//流程
+		public String[] ProcessArray = new String[4];
+//四组流程（提取出不同节点名称）
+		public void processGet(File file) throws Exception 
+//从文件中提取流程节点
+}
+	class Service {//服务
+		public Node[][] serviceArray = new Node[14][500];
+//14个服务活动，各有500个候选服务
+		public void serviceGet(File file) throws Exception 
+//从文件中读取有效信息，存入节点数组内
+	class Result {
+		public double qos;//qos=最优qos
+		public double price; //price=最优price
+		public double reliability;	// reliability=最优reliability
+		public List<String> Nodename = new ArrayList<String>();//最优节点名称
+		Result(double x, double y, int i) //构造函数
+		void ResultGet(String process, Node[][] Service, int x)//找到最优解
+}
+3.4	时间复杂度分析
+排序时间复杂度为O(n)=mLog(n)(m=14,n=500),之后进行筛选的时间复杂度最坏为5^n
+(n为process个数)。
+4	实验结果
+4.1	流程1
+1、	流程
+ 
+2、	需求 price = 20     reliability=0.9
+3、	最终的服务选择结果
+ 
+4、	最终结果的全局QoS属性: Reliability=0.9410939999999999   Price=8.41   QoS=0.8569939999999998 
+5、	算法执行时间
+
+启动时刻： 1411608533375ms  结束时刻： 1411608533399ms   运行时间： 24ms
+4.2	流程2
+1、	流程
+ 
+2、需求 price = 40     reliability=0.8
+3、最终的服务选择结果
+ 
+4、最终结果的全局QoS属性: Reliability=0.9316830599999999   Price=12.4   QoS=0.8076830599999999
+5、算法执行时间
+
+启动时刻： 1411608533399ms  结束时刻： 1411608533414ms   运行时间： 15ms
+
+4.3	流程3
+1、	流程
+ 
+2、	需求 price = 70       reliability=0.6
+3、	最终的服务选择结果
+ 
+4、	最终结果的全局QoS属性:  Reliability=0.8949710300205905   Price=20.630000000000003   QoS=0.6886710300205905
+5、	算法执行时间
+启动时刻： 1411608533414ms  结束时刻： 1411608533476ms   运行时间： 62ms
+
+
+4.4	流程4
+1、	流程
+ 
+2、	需求 price = 80     reliability=0.4
+3、	最终的服务选择结果
+ 
+4、	最终结果的全局QoS属性: Reliability=0.8770716094201787   Price=23.310000000000002   QoS=0.6439716094201786
+5、	算法执行时间
+启动时刻： 1411608533476ms  结束时刻： 1411608533837ms   运行时间： 361ms
+
+5	编程语言与环境
+编程语言：java；
+编程环境：java JDK；eclipse IDE；
+
+10	小结
+对本次实验过程和结果的思考。
+此次试验目的在于体会结对编程。但是主要瓶颈为两人之前均没有深入使用过java，因此每个人首先要解决的问题就是快速熟悉java，这也在某种程度上影响了结对编程的效果。因为很多时候是两个人在相互讨论语法，相互学习。
+但是也体会到了结对编程对于代码错误率的降低，同伴可以及时细致观察到细小不易察觉的错误。同时，两人商量设计数据结构和算法也避免了个人思考的不完整性。使得数据结构和算法较为合适，在后期的改动并不大。
+
