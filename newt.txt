@@ -1,0 +1,250 @@
+package csj;
+
+import java.io.*;
+import java.util.*;
+
+class QuickSort {
+	public Node data[];
+
+	private int partition(Node sortArray[], int low, int hight) {
+		Node key = new Node();
+		key.name = sortArray[low].name;
+		key.reliability = sortArray[low].reliability;
+		key.price = sortArray[low].price;
+		key.qos = sortArray[low].qos;
+
+		while (low < hight) {
+			while (low < hight && sortArray[hight].qos <= key.qos)
+				hight--;
+			sortArray[low].name = sortArray[hight].name;
+			sortArray[low].reliability = sortArray[hight].reliability;
+			sortArray[low].price = sortArray[hight].price;
+			sortArray[low].qos = sortArray[hight].qos;
+
+			while (low < hight && sortArray[low].qos >= key.qos)
+				low++;
+			sortArray[hight].name = sortArray[low].name;
+			sortArray[hight].reliability = sortArray[low].reliability;
+			sortArray[hight].price = sortArray[low].price;
+			sortArray[hight].qos = sortArray[low].qos;
+		}
+		sortArray[low].name = key.name;
+		key.reliability = sortArray[low].reliability;
+		key.price = sortArray[low].price;
+		key.qos = sortArray[low].qos;
+
+		return low;
+	}
+
+	public void sort(int low, int hight) {
+		if (low < hight) {
+			int result = partition(data, low, hight);
+			sort(low, result - 1);
+			sort(result + 1, hight);
+		}
+
+	}
+}
+
+class Node {
+	public String name;
+	public double qos;
+	public double reliability;
+	public double price;
+
+	public Node() {
+		reliability = 0;
+		price = 0;
+		qos = 0;
+	}
+}
+
+class Process {
+	public String[] ProcessArray = new String[4];
+
+	public void processGet(File file) throws Exception {
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String s;
+		for (int i = 0; i < 4; i++) {
+			s = br.readLine();
+			List<String> data = new ArrayList<String>();
+			for (int j = 0; j < s.length(); j++) {
+				String t = s.substring(j, j + 1);
+				if ((!data.contains(t)) && (!t.equals(",")) && (!t.equals("("))
+						&& (!t.equals(")"))) {
+					data.add(t);
+				}
+			}
+			ProcessArray[i] = "";
+			for (String t : data) {
+				ProcessArray[i] += t;
+			}
+		}
+
+		br.close();
+	}
+}
+
+class Req {
+	public Node[] reqArray = new Node[4];
+
+	public void reqGet(File file) throws Exception {
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String s;
+		for (int i = 0; i < 4; i++) {
+			reqArray[i] = new Node();
+			s = br.readLine();
+			reqArray[i].reliability = Double.parseDouble(s.substring(1, 4));
+			reqArray[i].price = Double.parseDouble(s.substring(5, 7));
+		}
+		br.close();
+	}
+}
+
+class Service {
+
+	public Node[][] serviceArray = new Node[14][500];
+
+	public void serviceGet(File file) throws Exception {
+		FileReader fr = new FileReader(file);
+		BufferedReader br = new BufferedReader(fr);
+		String s;
+		String nameTemp = new String();
+		String rTemp = new String();
+		String pTemp = new String();
+		String sSep = " "; // 空格切分
+		for (int i = 0; i < 14; i++) {
+			for (int j = 0; j < 500; j++) {
+				serviceArray[i][j] = new Node();
+				s = br.readLine();
+				int iIndex = -1;
+				int iEnd = 0;
+				for (int k = 0; k < 5; k++) {
+					iEnd = s.indexOf(sSep, iIndex + 1); // find the index of
+														// sSep from the start
+														// Index(iIndex+1); in
+														// order to lex string
+					if (k == 0) {
+						nameTemp = s.substring(iIndex + 1, iEnd);
+
+					}
+					if (k == 2)
+						rTemp = s.substring(iIndex + 1, iEnd);// substring from
+																// startIndex to
+																// endIndex
+					if (k == 4)
+						pTemp = s.substring(iIndex + 1);
+					iIndex = iEnd;
+				}
+				serviceArray[i][j].name = nameTemp;
+				serviceArray[i][j].reliability = Double.parseDouble(rTemp); // string
+																			// to
+																			// double(valueof,to
+																			// Double,class)
+				serviceArray[i][j].price = Double.parseDouble(pTemp);
+				serviceArray[i][j].qos = serviceArray[i][j].reliability
+						- serviceArray[i][j].price / 100;
+
+			}
+		}
+		// after get this 2d array,we directly sort it;
+		for (int i = 0; i < 14; i++) {
+			QuickSort qs = new QuickSort();
+			qs.data = serviceArray[i];
+			qs.sort(0, qs.data.length - 1);
+		}
+		for (int i = 0; i < 14; i++) {
+			for (int j = 0; j < 500; j++) {
+				// System.out.println(serviceArray[i][j].qos);
+			}
+		}
+		br.close();
+	}
+}
+
+class Result {
+	public double qos;
+	public double price;
+	public double reliability;
+	public List<String> Nodename = new ArrayList<String>();
+
+	Result(double x, double y, int i) {
+		qos = 0;
+		price = x;
+		reliability = y;
+		for (int j = 0; j < i; j++) {
+			Nodename.add(null);
+		}
+	}
+
+	void ResultGet(String process, Node[][] Service, int x) {
+			price = price
+					+ Service[(int) (process.charAt(process.length() - x)) - 65][0].price;
+			reliability = reliability
+					* Service[(int) (process.charAt(process.length() - x)) - 65][0].reliability;
+			qos = reliability - price / 100;
+			Nodename
+					.set(process.length() - x,
+							Service[(int) (process.charAt(process.length() - x)) - 65][0].name);
+			if (x != 1) {
+				ResultGet(process, Service, x - 1);
+			}
+}
+}
+public class exp {
+	public static void main(String[] args) throws Exception {
+		File file1 = new File("PROCESS.txt");
+		File file2 = new File("REQ.txt");
+		File file3 = new File("SERVICE.txt");
+		File file4 = new File("RESULT.txt");
+		// array
+		Req req = new Req();
+		req.reqGet(file2); // read req.txt and store it to array
+		Process process = new Process();
+		process.processGet(file1); // read process.txt and store it to list
+									// array
+		FileWriter fw = new FileWriter(file4);
+		Service[] ser = new Service[4];
+
+		Result[] resu = new Result[4];
+		for (int i = 0; i < 4; i++) {
+			long startTime = System.currentTimeMillis();
+			ser[i] = new Service();
+			ser[i].serviceGet(file3); // read service.txt and store it to a 2d
+			resu[i] = new Result(req.reqArray[i].price,
+					req.reqArray[i].reliability,
+					process.ProcessArray[i].length());
+			resu[i].ResultGet(process.ProcessArray[i], ser[i].serviceArray,
+					process.ProcessArray[i].length());
+			FileReader fr = new FileReader(file1);
+			BufferedReader br = new BufferedReader(fr);
+			String s = new String();
+			for (int j = 0; j <= i; j++) {
+				s = br.readLine();
+			}
+			for (int j = 0; j < s.length(); j++) {
+				String t = s.substring(j, j + 1);
+
+				if (t.equals(",") || t.equals("(") || t.equals(")")) {
+					fw.write(t);
+				} else {
+					for (int k = 0; k < resu[i].Nodename.size(); k++) {
+						if (t.charAt(0) == resu[i].Nodename.get(k).charAt(0)) {
+							fw.write(resu[i].Nodename.get(k));
+						}
+					}
+				}
+			}
+			fw.write("\r\n");
+			fw.write("Reliability=" + resu[i].reliability + "   Price="
+					+ resu[i].price + "   QoS=" + resu[i].qos + "\r\n");
+			long endTime = System.currentTimeMillis();
+			fw.write("启动时刻： " + startTime + "ms  结束时刻： " + endTime
+					+ "ms   运行时间： " + (endTime - startTime) + "ms" + "\r\n");
+			br.close();
+		}
+		fw.close();
+	}
+}
