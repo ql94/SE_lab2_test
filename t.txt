@@ -1,0 +1,18 @@
+src/labf/lab.java:49:	Local variable 'encoding' could be declared final
+src/labf/lab.java:49:	The String literal "GBK" appears 4 times in this file; the first occurrence is on line 49
+src/labf/lab.java:51:	Potential violation of Law of Demeter (object not created locally)
+src/labf/lab.java:55:	Found 'DD'-anomaly for variable 'lineTxt' (lines '55'-'61').
+src/labf/lab.java:61:	Avoid assignments in operands
+src/labf/lab.java:64:	Potential violation of Law of Demeter (method chain calls)
+src/labf/lab.java:76:	System.out.println is used
+src/labf/lab.java:76:	The String literal "�Ҳ���ָ�����ļ�" appears 4 times in this file; the first occurrence is on line 76
+src/labf/lab.java:78:	Avoid catching generic exceptions such as NullPointerException, RuntimeException, Exception in try-catch block
+src/labf/lab.java:80:	Avoid printStackTrace(); use a logger call instead.
+src/labf/lab.java:84:	The method read_process_txt() has an NPath complexity of 10375
+src/labf/lab.java:98:	System.arraycopy is more efficient
+src/labf/lab.java:177:	Use one line for each declaration, it enhances code readability.
+src/labf/lab.java:205:	Prefer StringBuffer over += for concatenating strings
+src/labf/lab.java:239:	Avoid really long methods.
+src/labf/lab.java:239:	The method handle_service_2() has an NCSS line count of 101
+src/labf/lab.java:338:	Use one line for each declaration, it enhances code readability.
+src/labf/lab.java:385:	Avoid if (x != y) ..; else ..;
